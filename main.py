@@ -1,18 +1,28 @@
 from tkinter import *
 import json
-import customtkinter  # <- import the CustomTkinter module
 from tkinter import filedialog as fd
 from tkinter import ttk
+import os
 
-TEST_CONFIGURE = True
-TEST_REMOVING = False
-
-root_tk = customtkinter.CTk()
+root_tk = Tk()
 root_tk.geometry("")
 root_tk.resizable(width=False, height=False)
+root_tk.configure(background="#1f1f1f")
 root_tk.title("ProxViewer for MiFare 1K")
 style = ttk.Style()
 
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+buttonImage = resource_path("buttonImg.png")
+buttonImg = PhotoImage(file = buttonImage)
 
 def insertSpaces(string, integer, spaceType):
     if spaceType == 0:
@@ -69,7 +79,7 @@ def createTable(data, pos, rowStart, rowEnd, sectorStart):
 
 
 def displayData(data):
-    labelData = customtkinter.CTkLabel(root_tk, width=200, text="no data...", justify=LEFT)
+    labelData = Label(root_tk, width=50, text="no data...", justify=LEFT, bg="#1f1f1f", fg='yellow')
     labelData.config(font=("Courier", 12))
     labelData["text"] = "UID:\t" + data["Card"]["UID"] + "\nType:\t" + data["FileType"] + "\nSAK:\t" + data["Card"][
         "SAK"] + "\nATQA:\t" + data["Card"]["ATQA"]
@@ -77,14 +87,10 @@ def displayData(data):
 
 
 def setup():
-    initialButton = customtkinter.CTkButton(root_tk, width=500, height=50, text="Select JSON Dump File",
-                                            command=selectFile)
+    initialButton = Button(root_tk, text="Select JSON Dump File", command=selectFile, image = buttonImg, highlightthickness = 0, bd = 0)
     initialButton.pack(pady=20)
 
-    if TEST_CONFIGURE: initialButton.configure(text="Select JSON Dump File")
-    if TEST_REMOVING: initialButton.configure(text="no file selected")
-
-    label = customtkinter.CTkLabel(root_tk, width=200, text="no file selected", text_color="#808080")
+    label = Label(root_tk, width=20, text="no file selected", fg="#808080", bg="#1f1f1f")
     label.config(font=("Courier", 12))
     label.pack(pady=10)
 
@@ -93,12 +99,10 @@ def selectFile():
     for widget in root_tk.winfo_children():
         widget.destroy()
 
-    fileDir = customtkinter.CTkButton(root_tk, width=500, height=50, text="Select JSON Dump File", command=selectFile)
+    fileDir = Button(root_tk, text="Select JSON Dump File", command=selectFile, image = buttonImg, highlightthickness = 0, bd = 0)
     fileDir.pack(pady=20)
-    if TEST_CONFIGURE: fileDir.configure(text="Select JSON Dump File")
-    if TEST_REMOVING: fileDir.configure(text="no file selected")
 
-    label = customtkinter.CTkLabel(root_tk, width=200, text="no file selected", text_color="#808080")
+    label = Label(root_tk, text="no file selected", fg="#808080", bg="#1f1f1f")
     label.config(font=("Courier", 12))
     label.pack(pady=10)
 
